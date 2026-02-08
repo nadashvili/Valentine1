@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>მარიისთვის ❤️</title>
+    <!-- Fonts & Tailwind -->
+    <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+    @font-face {
+    font-family: 'MyCustomFont'; /* აქ არქმევთ სახელს, რასაც გინდათ */
+    src: url('gugeshashvili_8_mthavruli_bold-52145488073.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    font-family: 'MyCustomFont';
+}
+        body {
+            
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+
+        .heart-pulse {
+            width: 50px;
+            height: 50px;
+            background: #ff4d4d;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: pulse 1.2s infinite;
+        }
+
+        .heart-pulse::before, .heart-pulse::after {
+            content: "";
+            width: 50px;
+            height: 50px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart-pulse::before { top: -25px; left: 0; }
+        .heart-pulse::after { left: 25px; top: 0; }
+
+        @keyframes pulse {
+            0% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.2); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        /* Gatekeeper Overlay */
+        #gatekeeper {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #FF00003B 0%, #000 100%);
+            z-index: 9998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glow-btn {
+            background: transparent;
+            border: 2px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .glow-btn:hover {
+            background: #ff4d4d;
+            color: white;
+            box-shadow: 0 0 40px rgba(255, 77, 77, 0.6);
+        }
+
+        /* Section Styles */
+        .reveal {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        .polaroid {
+            background: white;
+            padding: 12px 12px 48px 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transform: rotate(-2deg);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 320px;
+            margin: 0 auto;
+            border-radius: 5px;
+        }
+
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid:hover { transform: rotate(0) scale(1.08); z-index: 10; }
+        
+        /* 3:4 Aspect Ratio Implementation */
+        .polaroid img { 
+            width: 100%; 
+            aspect-ratio: 3 / 4; 
+            object-fit: cover; 
+            display: block;
+        }
+
+        .polaroid p { 
+            color: #333; 
+            margin-top: 18px; 
+            font-weight: 700; 
+            text-align: center; 
+            font-size: 1.2rem;
+            
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #ff4d4d; border-radius: 10px; }
+
+        .typewriter-container {
+            min-height: 4em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="heart-pulse"></div>
+        <p class="mt-8 text-sm tracking-widest text-gray-400">იტვირთება სიყვარულით...</p>
+    </div>
+
+    <!-- Gatekeeper -->
+    <div id="gatekeeper" class="flex flex-col gap-8 text-center px-6">
+        <h2 class="text-2xl font-light">მარი, მზად ხარ ?</h2>
+        <button class="glow-btn" onclick="unlockContent()">დააჭირე აქ</button>
+    </div>
+
+    <!-- Main Content (Hidden Initially) -->
+    <main id="main-content" class="hidden">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1518199266791-739d6ff26df5" alt="Background" class="w-full h-full object-cover opacity-30 scale-105">
+                <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black"></div>
+            </div>
+            <div class="relative z-10 text-center px-6 typewriter-container">
+                <h1 class="text-xl md:text-3xl font-light leading-relaxed max-w-2xl mx-auto" id="typing-hero"></h1>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="py-32 px-6 bg-zinc-950">
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="reveal">
+                    <span class="text-7xl font-bold text-red-500 counter" data-target="540">0</span>
+                    <p class="text-gray-400 mt-4 text-lg">დღე ერთად</p>
+                </div>
+                <div class="reveal">
+                    <span class="text-7xl font-bold text-red-500 counter" data-target="23">0</span>
+                    <p class="text-gray-400 mt-4 text-lg">პაემანი</p>
+                </div>
+                <div class="reveal">
+                    <span class="text-7xl font-bold text-red-500">∞</span>
+                    <p class="text-gray-400 mt-4 text-lg">სიყვარული</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-32 px-6 bg-black">
+            <h2 class="text-3xl font-bold text-center mb-24 reveal">ჩვენი საყვარელი მომენტები</h2>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+                <!-- Photo 1 -->
+                <div class="polaroid reveal">
+                    <img src="https://i.postimg.cc/tJR9fmB8/Picsart_26_02_08_06_45_40_862.jpg" alt="[მარიას საყვარელი ფოტო]">
+                    <p>ჩემი საყვარელი ფოტო</p>
+                </div>
+                <!-- Photo 2 -->
+                <div class="polaroid reveal">
+                    <img src="https://i.postimg.cc/yxf7zX5V/Picsart_26_02_08_06_42_55_769.jpg" alt="[საუკეთესო პაემანი]">
+                    <p>საუკეთესო პაემანი</p>
+                </div>
+                <!-- Photo 3 -->
+                <div class="polaroid reveal">
+                    <img src="https://i.postimg.cc/x8s9Sy79/Picsart_26_02_08_06_44_09_298.jpg" alt="[ჩვენი საყვარელი დღე]">
+                    <p>ჩვენი საყვარელი დღე</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="py-32 px-6 bg-zinc-950">
+            <div class="max-w-xl mx-auto bg-black p-10 rounded-3xl border border-zinc-800 shadow-2xl reveal text-center">
+                <h3 class="text-2xl font-bold mb-8">გახსოვს, სად ვიყავით ამ დროს?</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <button class="w-full p-4 rounded-xl border border-zinc-800 hover:border-red-500 hover:bg-zinc-900 transition-all duration-300 quiz-opt" onclick="checkQuiz('ურეკი')">ურეკი</button>
+                    <button class="w-full p-4 rounded-xl border border-zinc-800 hover:border-red-500 hover:bg-zinc-900 transition-all duration-300 quiz-opt" onclick="checkQuiz('ბათუმი')">ბათუმი</button>
+                    <button class="w-full p-4 rounded-xl border border-zinc-800 hover:border-red-500 hover:bg-zinc-900 transition-all duration-300 quiz-opt" onclick="checkQuiz('ქობულეთი')">ქობულეთი</button>
+                </div>
+                <div id="quiz-success" class="hidden mt-8 text-red-500 font-bold text-xl animate-pulse">
+                    ზუსტად ეს ის დღეა...
+                </div>
+            </div>
+        </section>
+
+        <!-- Letter Section -->
+        <section id="letter" class="py-48 px-6 bg-black flex items-center justify-center">
+            <div class="max-w-2xl text-center">
+                <p class="text-xl md:text-3xl leading-relaxed italic text-gray-200 reveal font-light" id="love-letter">
+                    "მარი, შენ ხარ ჩემი ყველაზე დიდი საჩუქარი. ყოველი დღე შენთან ერთად ნამდვილი დღესასწაულია. მიყვარხარ უსასრულოდ!"
+                </p>
+                <p class="mt-8 text-red-500 font-bold text-lg reveal">- შენი ნიკა</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-20 px-6 text-center bg-zinc-950 border-t border-zinc-900">
+            <div class="reveal">
+                <h3 class="text-xl mb-8 font-light">ველოდები შენს ზარს...</h3>
+                <a href="tel:+995598893999" class="glow-btn inline-block no-underline">დამირეკე</a>
+                <p class="mt-16 text-zinc-600 text-xs tracking-widest uppercase">Love Story — 2026</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Hidden Audio -->
+    <audio id="bg-music" loop>
+        <source src="https://www.dropbox.com/scl/fi/t2yvmgi0ycpyy9cg6g2ay/Sting-Shape-of-My-Heart-Leon.mp3?rlkey=jjrk4boceqxtmvbeiptxqtez6&st=1lvspad3&dl=1" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Preloader 
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.getElementById('gatekeeper').style.display = 'flex';
+                }, 800);
+            }, 1500);
+        });
+
+        // Content Unlock & Music Fix
+        function unlockContent() {
+            const gate = document.getElementById('gatekeeper');
+            const main = document.getElementById('main-content');
+            const music = document.getElementById('bg-music');
+
+            gate.style.opacity = '0';
+            setTimeout(() => {
+                gate.style.display = 'none';
+                main.classList.remove('hidden');
+                
+                // Initialize effects
+                initTyping();
+                initReveal();
+                
+                // Audio Context Start
+                music.volume = 0.5;
+                music.play().catch(e => console.log("Audio interaction required"));
+            }, 600);
+        }
+
+        // Typewriter 
+        function initTyping() {
+            const text = "მარი, მინდა რომ ეს დღე სხვანაირად დაგვამახსოვრდეს...";
+            const container = document.getElementById('typing-hero');
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    container.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 85);
+                }
+            }
+            type();
+        }
+
+        // Intersection Observer for Reveal
+        function initReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        if (entry.target.querySelector('.counter')) {
+                            startCounters(entry.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // Animated Counters
+        function startCounters(parent) {
+            const counters = parent.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                if (counter.dataset.started) return;
+                counter.dataset.started = "true";
+                
+                const target = +counter.getAttribute('data-target');
+                let count = 0;
+                const duration = 2000;
+                const increment = target / (duration / 16);
+
+                const update = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.innerText = Math.floor(count);
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                update();
+            });
+        }
+
+        // Quiz 
+        function checkQuiz(answer) {
+            if (answer === 'ბათუმი') {
+                document.getElementById('quiz-success').classList.remove('hidden');
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.7 },
+                    colors: ['#ff4d4d', '#ffffff', '#ffb3b3']
+                });
+                document.querySelectorAll('.quiz-opt').forEach(btn => {
+                    btn.disabled = true;
+                    if(btn.innerText !== 'ბათუმი') btn.style.opacity = '0.3';
+                });
+            } else {
+                const btn = event.target;
+                btn.style.borderColor = '#fffff';
+                setTimeout(() => btn.style.borderColor = '', 500);
+            }
+        }
+    </script>
+</body>
+</html>
+
